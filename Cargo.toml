@@ -17,6 +17,7 @@ thiserror = "1.0.26"
 stack-buf = "0.1.6"
 fast-float = "0.2.0"
 serde = { version = "1.0.126", optional = true }
+speedy = { version = "0.7.1", optional = true }
 
 [dev-dependencies]
 bencher = "0.1.5"

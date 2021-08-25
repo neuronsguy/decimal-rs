@@ -21,6 +21,13 @@
 //! When this optional dependency is enabled, `Decimal` implements the `serde::Serialize` and
 //! `serde::Deserialize` traits.
 //!
+//!
+//! ### `speedy`
+//!
+//! When this optional dependency is enabled, `Decimal` implements the `speedy::Writable` and
+//! `speedy::Readable` traits.
+//! See  <https://github.com/koute/speedy>
+//!
 //! ## Usage
 //!
 //! To build a decimal, use [`Decimal`]:
@@ -79,6 +86,9 @@ mod u256;
 
 #[cfg(feature = "serde")]
 mod serde;
+
+#[cfg(feature = "speedy")]
+mod speedy;
 
 pub use crate::decimal::{Decimal, MAX_BINARY_SIZE, MAX_PRECISION};
 pub use crate::error::{DecimalConvertError, DecimalParseError};
