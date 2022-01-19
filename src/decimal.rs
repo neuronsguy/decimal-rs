@@ -19,6 +19,7 @@ use crate::error::DecimalConvertError;
 use crate::u256::{POWERS_10, ROUNDINGS, U256};
 use std::cmp::Ordering;
 use std::fmt;
+use std::fmt::Formatter;
 use std::hash::{Hash, Hasher};
 use std::io::Write;
 
@@ -36,7 +37,7 @@ const SCALE_SHIFT: u8 = 1;
 pub(crate) type Buf = stack_buf::StackVec<u8, 256>;
 
 /// High precision decimal.
-#[derive(Copy, Clone, Debug, Eq)]
+#[derive(Copy, Clone, Eq)]
 pub struct Decimal {
     pub(crate) int_val: u128,
     // A positive scale means a negative power of 10
@@ -749,6 +750,15 @@ impl Decimal {
 impl fmt::Display for Decimal {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut buf = Buf::new();
+        self.fmt_internal(false, f.precision(), &mut buf);
+        let str = unsafe { std::str::from_utf8_unchecked(buf.as_slice()) };
+        f.pad_integral(self.is_sign_positive(), "", str)
+    }
+}
+
+impl fmt::Debug for Decimal {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let mut buf = Buf::new();
         self.fmt_internal(false, f.precision(), &mut buf);
         let str = unsafe { std::str::from_utf8_unchecked(buf.as_slice()) };
